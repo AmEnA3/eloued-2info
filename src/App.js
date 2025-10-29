@@ -1,25 +1,30 @@
-import logo from './logo.svg';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Home from './components/Home';
+import StudentsModules from './components/StudentsModules';
+import TeacherDashboard from './components/TeacherDashboard';
+import ModulePage from './components/ModulePage';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<BrowserRouter>
+			<div className="min-h-full flex flex-col">
+				<Header />
+				<div className="flex-1">
+					<Routes>
+						<Route path="/" element={<Home />} />
+						<Route path="/etudiants" element={<StudentsModules />} />
+						<Route path="/enseignants" element={<TeacherDashboard />} />
+						<Route path="/module/:moduleId" element={<ModulePage />} />
+					</Routes>
+				</div>
+				<footer className="container-page py-8 text-center text-slate-500 text-sm">
+					© {new Date().getFullYear()} Université d’El Oued — 2ème année Informatique
+				</footer>
+			</div>
+		</BrowserRouter>
+	);
 }
 
 export default App;
