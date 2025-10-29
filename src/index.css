@@ -11,6 +11,19 @@ body {
 	@apply bg-gradient-to-b from-[#0f172a] to-[#1e293b] text-slate-100 font-sans text-center;
 }
 
+/* Responsive media defaults */
+@layer base {
+	img, video, canvas, svg {
+		max-width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	a {
+		word-break: break-word;
+	}
+}
+
 .container-page {
 	@apply max-w-6xl mx-auto px-4;
 }
