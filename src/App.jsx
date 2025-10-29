@@ -24,7 +24,7 @@ function App() {
 						initial={{ opacity: 0, y: 8 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.4, ease: 'easeOut' }}
-						className="flex-1 center-section"
+						className="flex-1"
 					>
 						<Routes>
 							<Route path="/" element={<Home />} />
