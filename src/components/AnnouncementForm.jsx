@@ -46,7 +46,7 @@ export default function AnnouncementForm({ moduleId, moduleTitle = '' }) {
 	}
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-3">
+		<form onSubmit={handleSubmit} className="teacher-announce-form space-y-3">
 			<div>
 				<label className="block text-sm font-medium mb-1">Nom de l’enseignant (optionnel)</label>
 				<input

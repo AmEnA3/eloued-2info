@@ -64,3 +64,93 @@ body {
 .center-section {
 	@apply min-h-[calc(100vh-64px-120px)] flex flex-col items-center justify-center;
 }
+
+/* Announcement form (teacher) — scoped styles for inputs/textareas */
+.teacher-announce-form input,
+.teacher-announce-form textarea {
+	/* light glowing text */
+	color: #faf8f8; /* purple-glow text when typing */
+	background-color: rgba(255,255,255,0.03); /* keep dark background */
+	border: 1px solid rgba(179,136,255,0.12);
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+	padding: 0.5rem 0.75rem;
+	outline: none;
+	transition: box-shadow .18s ease, border-color .18s ease, background-color .18s ease;
+}
+
+.teacher-announce-form input::placeholder,
+.teacher-announce-form textarea::placeholder {
+	color: #b388ff; /* slightly dimmer placeholder */
+	opacity: 1;
+}
+
+.teacher-announce-form textarea {
+	min-height: 4.5rem;
+	resize: vertical;
+}
+
+.teacher-announce-form input:focus,
+.teacher-announce-form textarea:focus {
+	border-color: rgba(179,136,255,0.6);
+	box-shadow: 0 6px 18px rgba(179,136,255,0.08), 0 0 12px rgba(179,136,255,0.06) inset;
+	background-color: rgba(255,255,255,0.04);
+	caret-color: #b388ff;
+}
+
+.teacher-announce-form .btn-primary {
+	/* ensure button glow matches input text */
+	--tw-bg-opacity: 1;
+	background-color: rgba(179,136,255,0.85);
+	box-shadow: 0 6px 18px rgba(179,136,255,0.12);
+}
+
+.teacher-announce-form .btn-primary:hover {
+	background-color: rgba(179,136,255,0.95);
+}
+
+.teacher-announce-form .text-slate-400 {
+	color: #b388ff; /* small labels/info use the glow color to match */
+}
+
+/* Custom select styling to match dark glass theme */
+.custom-select {
+	background-color: rgba(30,30,47,0.9); /* dark background */
+	color: #b388ff; /* bright text */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.5rem;
+	border: 1px solid rgba(179,136,255,0.12);
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+.custom-select:focus {
+	outline: none;
+	border-color: rgba(179,136,255,0.6);
+	box-shadow: 0 6px 18px rgba(179,136,255,0.06), 0 0 10px rgba(179,136,255,0.04) inset;
+}
+
+/* Option styling: note that some browsers limit styling of native option menu, but we set colors where supported */
+.custom-select option {
+	background-color: rgba(30,30,47,0.95);
+	color: #b388ff;
+}
+
+/* Ensure selected option text is visible in the select display */
+.custom-select:-moz-focusring {
+	color: #b388ff;
+	text-shadow: 0 0 0 #b388ff;
+}
+
+/* Small arrow indicator using background image (keeps native dropdown but custom arrow) */
+.custom-select {
+	background-image: linear-gradient(45deg, transparent 50%, #b388ff 50%), linear-gradient(135deg, #b388ff 50%, transparent 50%), linear-gradient(to right, rgba(255,255,255,0.02), rgba(255,255,255,0.02));
+	background-position: calc(100% - 18px) calc(1em + 2px), calc(100% - 13px) calc(1em + 2px), 100% 0;
+	background-size: 5px 5px, 5px 5px, 2.5rem 2.5rem;
+	background-repeat: no-repeat;
+}

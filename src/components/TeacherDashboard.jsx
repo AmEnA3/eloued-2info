@@ -20,7 +20,7 @@ export default function TeacherDashboard() {
 					<div className="card-body space-y-3">
 						<label className="block text-sm font-medium">Sélectionnez votre module</label>
 						<select
-							className="w-full rounded-lg border-slate-300 focus:border-primary-500 focus:ring-primary-500"
+							className="custom-select w-full rounded-lg border-slate-300 focus:border-primary-500 focus:ring-primary-500"
 							value={selectedModule}
 							onChange={(e) => setSelectedModule(e.target.value)}
 						>
