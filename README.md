@@ -68,3 +68,76 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Architecture
+
+This section explains the high-level architecture, main components, data flow and environment expectations for the project.
+
+### Purpose
+- Centralized learning portal for "Université d’El Oued – 2ème année Informatique".
+- Students browse modules and resources (PDFs, TD/TP, YouTube, Drive links).
+- Teachers post real-time announcements per module (stored in Firestore).
+
+### Tech stack
+- React (Create React App) — SPA root and routing.
+- React Router — client-side routing for pages and module routes.
+- Tailwind CSS — utility-first styling (see `src/index.css`, `tailwind.config.js`).
+- Framer Motion — animations and transitions.
+- Firebase Firestore — real-time announcements (see `src/firebase.js`).
+
+### High-level structure
+- public/
+	- Static assets and course PDFs under `public/pfds/...`.
+- src/
+	- `App.jsx` — root component, routing, and app layout (Header, Footer).
+	- `index.css` — Tailwind directives and shared utility classes (cards, buttons, header spacer).
+	- `firebase.js` — Firebase initialization (reads env vars prefixed with `REACT_APP_`).
+	- `context/RoleContext.jsx` — simple role provider (student/teacher) persisted in localStorage.
+	- `data/modules.js` — static modules catalog (IDs, titles, resource links) and helper `getModuleById`.
+	- `components/` — UI components and pages (Header, Home, StudentsModules, ModulePage, AnnouncementForm, AnnouncementList, etc.).
+
+### Routing / pages
+- `/` — Home (landing page with links to student / teacher areas).
+- `/etudiants` — Student modules listing (grid of modules).
+- `/module/:moduleId` — Module detail page (resources + announcements).
+- `/enseignants` — Teacher dashboard (publish announcements).
+
+### Data flow
+- Static resources: module metadata lives in `src/data/modules.js` and links to static PDFs in `public/pfds`.
+- Announcements: UI components use Firestore directly:
+	- `AnnouncementForm` uses `addDoc(collection(db, 'announcements'), {...})` with `serverTimestamp()`.
+	- `AnnouncementList` listens with `onSnapshot(query(... where('moduleId','==', moduleId) ...))` to stream real-time updates.
+	- `updateDoc` and `deleteDoc` are used to edit and remove announcements.
+
+### State & access control
+- `RoleContext` stores a client-side role (`'etudiant'` or `'enseignant'`) and persists it to `localStorage`.
+- The role controls UI features only (e.g., showing the announcement form or edit/delete controls). There is no server-side authentication in the current implementation — switching to `enseignant` is purely client-side.
+
+### Environment variables
+Create a `.env` file (not committed) containing Firebase credentials named like:
+```
+REACT_APP_FIREBASE_API_KEY=...
+REACT_APP_FIREBASE_AUTH_DOMAIN=...
+REACT_APP_FIREBASE_PROJECT_ID=...
+REACT_APP_FIREBASE_STORAGE_BUCKET=...
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=...
+REACT_APP_FIREBASE_APP_ID=...
+```
+
+### How to run
+1. npm install
+2. npm start
+
+### Operational notes & suggestions
+- Authentication: add Firebase Auth (or another provider) to securely identify teachers and prevent unauthorized posting/deleting of announcements.
+- Modules source: consider moving `modules.js` to a Firestore collection or a small CMS if non-developers need to edit resources.
+- Responsive/Accessibility: continue testing on small screens and add semantic ARIA attributes where helpful.
+- Tests: add unit and integration tests for announcement behavior and routing. The project already includes testing libraries in `package.json`.
+- Production build: `npm run build` produces an optimized bundle (CRA).
+
+### Small contract (inputs/outputs, success)
+- Inputs: environment variables (Firebase config); static `modules.js` for catalog entries; optional teacher-provided announcement content.
+- Outputs: static pages, Firestore documents in `announcements` collection, and real-time UI updates for connected clients.
+- Success criteria: students can view resources and announcements; teachers can post/edit/delete announcements and changes are visible to students in real time.
+
+If you'd like, I can also add a generated component tree diagram or a separate `docs/ARCHITECTURE.md` with a diagram and example Firestore rules for production.

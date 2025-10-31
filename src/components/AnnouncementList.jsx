@@ -26,6 +26,7 @@ export default function AnnouncementList({ moduleId }) {
 	}, [moduleId]);
 
 	async function saveEdit(id) {
+		if (role !== 'enseignant') return; // guard: only teachers may save edits
 		const ref = doc(db, 'announcements', id);
 		await updateDoc(ref, { message: editMessage });
 		setEditingId(null);
@@ -33,6 +34,7 @@ export default function AnnouncementList({ moduleId }) {
 	}
 
 	async function remove(id) {
+		if (role !== 'enseignant') return; // guard: only teachers may delete
 		const ref = doc(db, 'announcements', id);
 		await deleteDoc(ref);
 	}

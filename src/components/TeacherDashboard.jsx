@@ -1,9 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AnnouncementForm from './AnnouncementForm';
 import { modulesCatalog } from '../data/modules';
+import { useRole } from '../context/RoleContext';
 
 export default function TeacherDashboard() {
 	const [selectedModule, setSelectedModule] = useState(modulesCatalog[0]?.id || '');
+	const { role, setRole } = useRole();
+
+	// When this page is mounted, ensure the app is in teacher mode so the form is active.
+	useEffect(() => {
+		if (setRole) setRole('enseignant');
+	}, [setRole]);
 
 	return (
 		<main className="container-page py-8 space-y-6">
@@ -29,13 +36,14 @@ export default function TeacherDashboard() {
 						<h2 className="font-semibold">Publier une annonce</h2>
 					</div>
 					<div className="card-body">
-						<AnnouncementForm moduleId={selectedModule} />
+						<AnnouncementForm moduleId={selectedModule} moduleTitle={modulesCatalog.find(m => m.id === selectedModule)?.title || ''} />
 					</div>
 				</div>
 			</div>
 		</main>
 	);
 }
+
 
 
 

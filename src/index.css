@@ -55,9 +55,9 @@ body {
 	@apply bg-gradient-to-r from-primary-700/70 to-primary-500/70 text-white backdrop-blur-md border-b border-white/10;
 }
 
-/* Fixed header spacer (matches header h-16 = 4rem) */
+/* Fixed header spacer */
 .header-spacer {
-	height: 4rem;
+	height: 64px;
 }
 
 /* Center section helper */

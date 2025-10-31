@@ -1,6 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
 import AnnouncementList from './AnnouncementList';
-import AnnouncementForm from './AnnouncementForm';
 import { getModuleById } from '../data/modules';
 import { useRole } from '../context/RoleContext';
 
@@ -71,12 +70,6 @@ export default function ModulePage() {
 							<h2 className="font-semibold">Annonces du Professeur</h2>
 						</div>
 						<div className="card-body space-y-6">
-							{role === 'enseignant' && (
-								<div>
-									<h3 className="font-medium mb-2">Publier une annonce</h3>
-									<AnnouncementForm moduleId={moduleId} />
-								</div>
-							)}
 							<div>
 								<h3 className="font-medium mb-2">Liste</h3>
 								<AnnouncementList moduleId={moduleId} />
