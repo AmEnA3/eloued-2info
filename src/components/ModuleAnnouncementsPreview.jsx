@@ -1,28 +1,10 @@
-import { useEffect, useState } from 'react';
-import { collection, query, where, orderBy, limit, onSnapshot } from 'firebase/firestore';
-import { db } from '../firebase';
+import { useAnnouncements } from '../context/AnnouncementsContext';
 
 export default function ModuleAnnouncementsPreview({ moduleId }) {
-  const [latest, setLatest] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!moduleId) return;
-    const q = query(
-      collection(db, 'announcements'),
-      where('moduleId', '==', moduleId),
-      orderBy('createdAt', 'desc'),
-      limit(1)
-    );
-    const unsub = onSnapshot(q, (snap) => {
-      const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-      setLatest(docs[0] || null);
-      setLoading(false);
-    });
-    return () => unsub();
-  }, [moduleId]);
-
+  const { latestByModule, loading } = useAnnouncements();
   if (loading) return <div className="text-slate-500 text-sm">Chargement…</div>;
+
+  const latest = latestByModule[moduleId] || null;
   if (!latest) return <div className="text-slate-500 text-sm">Aucune annonce</div>;
 
   return (
