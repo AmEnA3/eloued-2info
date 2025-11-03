@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AnnouncementForm from './AnnouncementForm';
 import { modulesCatalog } from '../data/modules';
 import { useRole } from '../context/RoleContext';
@@ -6,15 +7,33 @@ import { useRole } from '../context/RoleContext';
 export default function TeacherDashboard() {
 	const [selectedModule, setSelectedModule] = useState(modulesCatalog[0]?.id || '');
 	const { role, setRole } = useRole();
+	const navigate = useNavigate();
 
-	// When this page is mounted, ensure the app is in teacher mode so the form is active.
 	useEffect(() => {
+		const isTeacher = localStorage.getItem('isTeacher') === 'true';
+		if (!isTeacher) {
+			navigate('/login-enseignant');
+			return;
+		}
 		if (setRole) setRole('enseignant');
-	}, [setRole]);
+	}, [setRole, navigate]);
+
+	const handleLogout = () => {
+		localStorage.removeItem('isTeacher');
+		navigate('/');
+	};
 
 	return (
 		<main className="container-page py-8 space-y-6">
-			<h1 className="text-2xl md:text-3xl font-bold">Espace Enseignant</h1>
+			<div className="flex justify-between items-center">
+				<h1 className="text-2xl md:text-3xl font-bold">Espace Enseignant</h1>
+				<button
+					onClick={handleLogout}
+					className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+				>
+					Se déconnecter
+				</button>
+			</div>
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 				<div className="card md:col-span-1">
 					<div className="card-body space-y-3">
@@ -43,6 +62,7 @@ export default function TeacherDashboard() {
 		</main>
 	);
 }
+
 
 
 

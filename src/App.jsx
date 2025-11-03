@@ -7,6 +7,7 @@ import RoleSelect from './components/RoleSelect';
 import Home from './components/Home';
 import StudentsModules from './components/StudentsModules';
 import TeacherDashboard from './components/TeacherDashboard';
+import TeacherLogin from './components/TeacherLogin';
 import ModulePage from './components/ModulePage';
 import Modules from './components/Modules';
 import ModuleDetails from './components/ModuleDetails';
@@ -36,6 +37,7 @@ function App() {
 							<Route path="/annonces" element={<AnnouncementsPage />} />
 						<Route path="/modules" element={<Modules />} />
 						<Route path="/modules/:slug" element={<ModuleDetails />} />
+							<Route path="/login-enseignant" element={<TeacherLogin />} />
 							<Route path="/enseignants" element={<TeacherDashboard />} />
 							<Route path="/module/:moduleId" element={<ModulePage />} />
 						</Routes>

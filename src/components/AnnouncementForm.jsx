@@ -4,6 +4,8 @@ import { db } from '../firebase';
 import { useRole } from '../context/RoleContext';
 import { useAnnouncements } from '../context/AnnouncementsContext';
 
+const isTeacherLoggedIn = () => localStorage.getItem('isTeacher') === 'true';
+
 export default function AnnouncementForm({ moduleId, moduleTitle = '' }) {
 	const { role } = useRole();
 	const [teacherName, setTeacherName] = useState('');
@@ -21,7 +23,7 @@ export default function AnnouncementForm({ moduleId, moduleTitle = '' }) {
 		e.preventDefault();
 		setError('');
 		setSuccess('');
-		if (role !== 'enseignant') {
+		if (!isTeacherLoggedIn()) {
 			setError('Vous devez être connecté en tant qu\'enseignant pour publier.');
 			return;
 		}
@@ -61,7 +63,7 @@ export default function AnnouncementForm({ moduleId, moduleTitle = '' }) {
 	}, [moduleId, getAnnouncementsForModule]);
 
 	async function saveEdit(id) {
-		if (role !== 'enseignant') return;
+		if (!isTeacherLoggedIn()) return;
 		try {
 			const ref = doc(db, 'announcements', id);
 			await updateDoc(ref, { message: editMessage });
@@ -74,7 +76,7 @@ export default function AnnouncementForm({ moduleId, moduleTitle = '' }) {
 	}
 
 	async function removeAnnouncement(id) {
-		if (role !== 'enseignant') return;
+		if (!isTeacherLoggedIn()) return;
 		try {
 			const ref = doc(db, 'announcements', id);
 			await deleteDoc(ref);
@@ -95,7 +97,7 @@ export default function AnnouncementForm({ moduleId, moduleTitle = '' }) {
 					onChange={(e) => setTeacherName(e.target.value)}
 					className="w-full rounded-lg border-slate-300 focus:border-primary-500 focus:ring-primary-500"
 					placeholder="Ex: D. Amenna"
-					disabled={role !== 'enseignant'}
+					disabled={!isTeacherLoggedIn()}
 				/>
 			</div>
 
@@ -107,13 +109,13 @@ export default function AnnouncementForm({ moduleId, moduleTitle = '' }) {
 						onChange={(e) => setMessage(e.target.value)}
 						className="w-full rounded-lg border-slate-300 focus:border-primary-500 focus:ring-primary-500 resize-none"
 						rows={4}
-						disabled={role !== 'enseignant'}
+						disabled={!isTeacherLoggedIn()}
 					/>
 				</div>
 				<div className="w-40 flex-shrink-0 flex flex-col items-end">
 					<div className="text-xs text-slate-400 mb-2">Module sélectionné</div>
 					<div className="mb-3 text-sm font-medium text-slate-200">{moduleTitle || moduleId}</div>
-					<button type="submit" disabled={submitting || role !== 'enseignant'} className="btn-primary w-full disabled:opacity-70">
+					<button type="submit" disabled={submitting || !isTeacherLoggedIn()} className="btn-primary w-full disabled:opacity-70">
 						{submitting ? 'Publication…' : 'Publier'}
 					</button>
 				</div>
@@ -122,7 +124,7 @@ export default function AnnouncementForm({ moduleId, moduleTitle = '' }) {
 			<div className="flex items-center gap-3">
 				{error && <span className="text-sm text-red-600">{error}</span>}
 				{success && <span className="text-sm text-green-600">{success}</span>}
-				{role !== 'enseignant' && <span className="text-sm text-slate-400 ml-auto">Vous n'êtes pas en mode enseignant — passez en mode <strong>enseignant</strong> pour publier.</span>}
+				{!isTeacherLoggedIn() && <span className="text-sm text-slate-400 ml-auto">Vous n'êtes pas connecté en tant qu'enseignant</span>}
 			</div>
 			</form>
 
@@ -149,7 +151,7 @@ export default function AnnouncementForm({ moduleId, moduleTitle = '' }) {
 										{a.createdAt?.toDate ? a.createdAt.toDate().toLocaleString() : ''}
 									</div>
 								</div>
-									{role === 'enseignant' && (
+									{isTeacherLoggedIn() && (
 										<div className="mt-3 flex gap-2 justify-end">
 											{editingId === a.id ? (
 												<>
@@ -172,6 +174,7 @@ export default function AnnouncementForm({ moduleId, moduleTitle = '' }) {
 		</>
 	);
 }
+
 
 
 
